@@ -17,7 +17,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__, static_folder='static')
-app.config['SECRET_KEY'] = 'secret-key-goes-here'
+app.config['SECRET_KEY'] = os.environ.get('API_KEY')
 jwt = JWTManager(app)
 CORS(app)
 
@@ -27,7 +27,7 @@ class Base(DeclarativeBase):
 
 
 db = SQLAlchemy(model_class=Base)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///smartpeps_store.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DB_URI", "sqlite:///smartpeps_store.db")
 db.init_app(app)
 
 
@@ -370,4 +370,4 @@ def search_product():
 
 
 if "__main__" == __name__:
-    app.run(debug=True)
+    app.run(debug=False)
